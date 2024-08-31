@@ -42,7 +42,12 @@ export function Link(props: LinkProps) {
 
   if (typeof className === 'function') {
     return (
-      <RemixNavLink to={toWithLocale} className={className} {...resOfProps} />
+      <RemixNavLink
+        to={toWithLocale}
+        end
+        className={className}
+        {...resOfProps}
+      />
     );
   }
 
