@@ -78,7 +78,7 @@ export default function Collections() {
               </Grid>
               <div className="flex items-center justify-center mt-6">
                 <Button as={NextLink} variant="secondary" width="full">
-                  {isLoading ? 'Loading...' : 'Next collections'}
+                  {isLoading ? 'Loading...' : 'Load more collections'}
                 </Button>
               </div>
             </>
