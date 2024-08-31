@@ -266,7 +266,7 @@ const LAYOUT_QUERY = `#graphql
 async function getLayoutData({storefront, env}: AppLoadContext) {
   const data = await storefront.query(LAYOUT_QUERY, {
     variables: {
-      headerMenuHandle: 'main-menu',
+      headerMenuHandle: 'header',
       footerMenuHandle: 'footer',
       language: storefront.i18n.language,
     },
