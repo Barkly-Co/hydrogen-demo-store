@@ -428,8 +428,7 @@ function Footer({menu}: {menu?: EnhancedMenu}) {
       <div
         className={`self-end pt-8 opacity-50 md:col-span-2 lg:col-span-${itemsCount}`}
       >
-        &copy; {new Date().getFullYear()} / Shopify, Inc. Hydrogen is an MIT
-        Licensed Open Source project.
+        &copy; {new Date().getFullYear()} / Barkly & Co
       </div>
     </Section>
   );
