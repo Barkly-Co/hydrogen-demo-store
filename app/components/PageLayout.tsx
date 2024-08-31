@@ -48,7 +48,11 @@ export function PageLayout({children, layout}: LayoutProps) {
           </a>
         </div>
         {headerMenu && layout?.shop.name && (
-          <Header title={layout.shop.name} menu={headerMenu} />
+          <Header
+            title={layout.shop.name}
+            menu={headerMenu}
+            logo={layout.shop.brand?.logo?.image?.url}
+          />
         )}
         <main role="main" id="mainContent" className="flex-grow">
           {children}
@@ -59,7 +63,15 @@ export function PageLayout({children, layout}: LayoutProps) {
   );
 }
 
-function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
+function Header({
+  title,
+  menu,
+  logo,
+}: {
+  title: string;
+  menu?: EnhancedMenu;
+  logo?: string | undefined;
+}) {
   const isHome = useIsHomePath();
 
   const {
@@ -91,12 +103,14 @@ function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
       <DesktopHeader
         isHome={isHome}
         title={title}
+        logo={logo}
         menu={menu}
         openCart={openCart}
       />
       <MobileHeader
         isHome={isHome}
         title={title}
+        logo={logo}
         openCart={openCart}
         openMenu={openMenu}
       />
@@ -171,11 +185,13 @@ function MenuMobileNav({
 
 function MobileHeader({
   title,
+  logo,
   isHome,
   openCart,
   openMenu,
 }: {
   title: string;
+  logo?: string | undefined;
   isHome: boolean;
   openCart: () => void;
   openMenu: () => void;
@@ -229,12 +245,16 @@ function MobileHeader({
         className="flex items-center self-stretch leading-[3rem] md:leading-[4rem] justify-center flex-grow w-full h-full"
         to="/"
       >
-        <Heading
-          className="font-bold text-center leading-none"
-          as={isHome ? 'h1' : 'h2'}
-        >
-          {title}
-        </Heading>
+        {logo ? (
+          <img className="dark:invert max-w-[50px]" src={logo} />
+        ) : (
+          <Heading
+            className="font-bold text-center leading-none"
+            as={isHome ? 'h1' : 'h2'}
+          >
+            {title}
+          </Heading>
+        )}
       </Link>
 
       <div className="flex items-center justify-end w-full gap-4">
@@ -250,11 +270,13 @@ function DesktopHeader({
   menu,
   openCart,
   title,
+  logo,
 }: {
   isHome: boolean;
   openCart: () => void;
   menu?: EnhancedMenu;
   title: string;
+  logo?: string | undefined;
 }) {
   const params = useParams();
   const {y} = useWindowScroll();
@@ -271,9 +293,13 @@ function DesktopHeader({
     >
       <div className="flex gap-12">
         <Link className="font-bold" to="/" prefetch="intent">
-          {title}
+          {logo ? (
+            <img className="dark:invert max-w-[100px]" src={logo} />
+          ) : (
+            title
+          )}
         </Link>
-        <nav className="flex gap-8">
+        <nav className="flex gap-8 items-center">
           {/* Top level menu items */}
           {(menu?.items || []).map((item) => (
             <Link
