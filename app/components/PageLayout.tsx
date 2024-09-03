@@ -170,7 +170,9 @@ function MenuMobileNav({
             target={item.target}
             onClick={onClose}
             className={({isActive}) =>
-              isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
+              isActive
+                ? 'pb-1 border-b -mb-px border-contrast/20 dark:border-primary/20'
+                : 'pb-1'
             }
           >
             <Text as="span" size="copy">
@@ -316,7 +318,9 @@ function DesktopHeader({
               target={item.target}
               prefetch="intent"
               className={({isActive}) =>
-                isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
+                isActive
+                  ? 'pb-1 border-b -mb-px dark:border-primary/20 border-contrast/20'
+                  : 'pb-1'
               }
             >
               {item.title}
