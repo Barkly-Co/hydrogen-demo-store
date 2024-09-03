@@ -248,7 +248,7 @@ function MobileHeader({
         {logo ? (
           <img
             alt="barkly & co logo"
-            className="dark:invert max-w-[50px]"
+            className={`dark:invert ${isHome && 'invert'} max-w-[50px]`}
             src={logo}
           />
         ) : (
@@ -300,7 +300,7 @@ function DesktopHeader({
           {logo ? (
             <img
               alt="barkly & co logo"
-              className="dark:invert max-w-[100px]"
+              className={`dark:invert ${isHome && 'invert'} max-w-[100px]`}
               src={logo}
             />
           ) : (
