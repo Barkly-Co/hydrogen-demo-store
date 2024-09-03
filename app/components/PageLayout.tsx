@@ -246,7 +246,11 @@ function MobileHeader({
         to="/"
       >
         {logo ? (
-          <img className="dark:invert max-w-[50px]" src={logo} />
+          <img
+            alt="barkly & co logo"
+            className="dark:invert max-w-[50px]"
+            src={logo}
+          />
         ) : (
           <Heading
             className="font-bold text-center leading-none"
@@ -294,7 +298,11 @@ function DesktopHeader({
       <div className="flex gap-12">
         <Link className="font-bold" to="/" prefetch="intent">
           {logo ? (
-            <img className="dark:invert max-w-[100px]" src={logo} />
+            <img
+              alt="barkly & co logo"
+              className="dark:invert max-w-[100px]"
+              src={logo}
+            />
           ) : (
             title
           )}
