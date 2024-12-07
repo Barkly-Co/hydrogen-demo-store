@@ -10,6 +10,7 @@ import {getSeoMeta} from '@shopify/hydrogen';
 import {PageHeader} from '~/components/Text';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
+import {PolicyLayout} from '~/components/PolicyLayout';
 
 export const headers = routeHeaders;
 
@@ -39,6 +40,10 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 export default function Page() {
   const {page} = useLoaderData<typeof loader>();
 
+  if (page.handle === 'cookies-policy' || page.handle === 'pre-order-policy') {
+    return <PolicyLayout title={page.title} body={page.body} />;
+  }
+
   return (
     <>
       <PageHeader heading={page.title}>
@@ -57,6 +62,7 @@ const PAGE_QUERY = `#graphql
     page(handle: $handle) {
       id
       title
+      handle
       body
       seo {
         description

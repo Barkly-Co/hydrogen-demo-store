@@ -1,14 +1,13 @@
+import {useLoaderData} from '@remix-run/react';
+import {getSeoMeta} from '@shopify/hydrogen';
 import {
   json,
-  type MetaArgs,
   type LoaderFunctionArgs,
+  type MetaArgs,
 } from '@shopify/remix-oxygen';
-import {useLoaderData} from '@remix-run/react';
 import invariant from 'tiny-invariant';
-import {getSeoMeta} from '@shopify/hydrogen';
 
-import {PageHeader, Section} from '~/components/Text';
-import {Button} from '~/components/Button';
+import {PolicyLayout} from '~/components/PolicyLayout';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
 
@@ -51,35 +50,7 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 
 export default function Policies() {
   const {policy} = useLoaderData<typeof loader>();
-
-  return (
-    <>
-      <Section
-        padding="all"
-        display="flex"
-        className="flex-col items-baseline w-full gap-8 md:flex-row"
-      >
-        <PageHeader
-          heading={policy.title}
-          className="grid items-start flex-grow gap-4 md:sticky top-36 md:w-5/12"
-        >
-          <Button
-            className="justify-self-start"
-            variant="inline"
-            to={'/policies'}
-          >
-            &larr; Back to Policies
-          </Button>
-        </PageHeader>
-        <div className="flex-grow w-full md:w-7/12">
-          <div
-            dangerouslySetInnerHTML={{__html: policy.body}}
-            className="prose dark:prose-invert"
-          />
-        </div>
-      </Section>
-    </>
-  );
+  return <PolicyLayout title={policy.title} body={policy.body} />;
 }
 
 const POLICY_CONTENT_QUERY = `#graphql
