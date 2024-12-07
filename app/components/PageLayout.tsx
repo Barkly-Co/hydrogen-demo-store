@@ -1,32 +1,33 @@
-import {useParams, Form, Await, useRouteLoaderData} from '@remix-run/react';
-import useWindowScroll from 'react-use/esm/useWindowScroll';
 import {Disclosure} from '@headlessui/react';
-import {Suspense, useEffect, useMemo} from 'react';
+import {Await, Form, useParams, useRouteLoaderData} from '@remix-run/react';
 import {CartForm} from '@shopify/hydrogen';
+import {Suspense, useEffect, useMemo} from 'react';
+import useWindowScroll from 'react-use/esm/useWindowScroll';
 
 import {type LayoutQuery} from 'storefrontapi.generated';
-import {Text, Heading, Section} from '~/components/Text';
-import {Link} from '~/components/Link';
 import {Cart} from '~/components/Cart';
 import {CartLoading} from '~/components/CartLoading';
-import {Input} from '~/components/Input';
-import {Drawer, useDrawer} from '~/components/Drawer';
 import {CountrySelector} from '~/components/CountrySelector';
+import {Drawer, useDrawer} from '~/components/Drawer';
 import {
-  IconMenu,
-  IconCaret,
-  IconLogin,
   IconAccount,
   IconBag,
+  IconCaret,
+  IconLogin,
+  IconMenu,
   IconSearch,
 } from '~/components/Icon';
+import {Input} from '~/components/Input';
+import {Link} from '~/components/Link';
+import {Heading, Section, Text} from '~/components/Text';
+import {useCartFetchers} from '~/hooks/useCartFetchers';
+import {useIsHydrated} from '~/hooks/useIsHydrated';
 import {
-  type EnhancedMenu,
   type ChildEnhancedMenuItem,
+  type EnhancedMenu,
+  pascalToSentenceCase,
   useIsHomePath,
 } from '~/lib/utils';
-import {useIsHydrated} from '~/hooks/useIsHydrated';
-import {useCartFetchers} from '~/hooks/useCartFetchers';
 import type {RootLoader} from '~/root';
 
 type LayoutProps = {
@@ -448,9 +449,9 @@ function Badge({
 function Footer({menu}: {menu?: EnhancedMenu}) {
   const isHome = useIsHomePath();
   const itemsCount = menu
-    ? menu?.items?.length + 1 > 4
+    ? menu?.items?.length + 2 > 4
       ? 4
-      : menu?.items?.length + 1
+      : menu?.items?.length + 2
     : [];
 
   return (
@@ -462,6 +463,7 @@ function Footer({menu}: {menu?: EnhancedMenu}) {
         bg-primary dark:bg-contrast dark:text-primary text-contrast overflow-hidden`}
     >
       <FooterMenu menu={menu} />
+      <ContactSection />
       <CountrySelector />
       <div
         className={`self-end pt-8 opacity-50 md:col-span-2 lg:col-span-${itemsCount}`}
@@ -533,6 +535,47 @@ function FooterMenu({menu}: {menu?: EnhancedMenu}) {
           </Disclosure>
         </section>
       ))}
+    </>
+  );
+}
+
+function ContactSection() {
+  const styles = {
+    section: 'grid gap-4',
+    nav: 'grid gap-2 pb-6',
+  };
+
+  const contactDetails = {
+    address: 'Unit 6 & 14 Brockman St, Gingin WA',
+    openingHours: 'by appointment only',
+    phone: '0409 975 906',
+    email: 'info@barklyandco.com',
+  };
+
+  return (
+    <>
+      <section key={1} className={styles.section}>
+        <Heading className="flex justify-between" size="lead" as="h3">
+          {/* {item.title} */}
+          Contact Us
+        </Heading>
+        <div
+          className={`max-h-48 h-fit overflow-hidden transition-all duration-300`}
+        >
+          <ul className="grid gap-2 pb-6">
+            {Object.entries(contactDetails).map(([key, value]) => {
+              return (
+                <li key={key}>
+                  <span className="font-semibold">
+                    {pascalToSentenceCase(key)}:
+                  </span>{' '}
+                  {value}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
     </>
   );
 }

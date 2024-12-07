@@ -312,3 +312,11 @@ export function isLocalPath(url: string) {
 
   return false;
 }
+
+export function pascalToSentenceCase(str: string): string {
+  // Add a space before any uppercase letter that follows a lowercase letter
+  const spacedStr = str.replace(/([a-z])([A-Z])/g, '$1 $2');
+
+  // Lowercase the entire string and capitalize only the first letter
+  return spacedStr.charAt(0).toUpperCase() + spacedStr.slice(1).toLowerCase();
+}
