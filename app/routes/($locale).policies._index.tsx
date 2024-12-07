@@ -22,9 +22,18 @@ export async function loader({
   const data = await storefront.query(POLICIES_QUERY);
 
   invariant(data, 'No data returned from Shopify API');
-  const policies = Object.values(
+
+  const shopPolicies = Object.values(
     data.shop as NonNullableFields<typeof data.shop>,
-  ).filter(Boolean);
+  )
+    .filter(Boolean)
+    .map((page) => ({...page, isPage: false}));
+
+  const pages = [data.cookiesPolicy, data.preOrderPolicy]
+    .filter(Boolean)
+    .map((page) => ({...page, isPage: true}));
+
+  const policies = [...shopPolicies, ...pages];
 
   if (policies.length === 0) {
     throw new Response('Not found', {status: 404});
@@ -53,7 +62,15 @@ export default function Policies() {
           return (
             policy && (
               <Heading className="font-normal text-heading" key={policy.id}>
-                <Link to={`/policies/${policy.handle}`}>{policy.title}</Link>
+                <Link
+                  to={
+                    policy.isPage
+                      ? `/pages/${policy.handle}`
+                      : `/policies/${policy.handle}`
+                  }
+                >
+                  {policy.title}
+                </Link>
               </Heading>
             )
           );
@@ -65,6 +82,12 @@ export default function Policies() {
 
 const POLICIES_QUERY = `#graphql
   fragment PolicyIndex on ShopPolicy {
+    id
+    title
+    handle
+  }
+
+  fragment PageFields on Page {
     id
     title
     handle
@@ -89,6 +112,12 @@ const POLICIES_QUERY = `#graphql
         title
         handle
       }
+    }
+    cookiesPolicy: page(handle: "cookies-policy") {
+      ...PageFields
+    }
+    preOrderPolicy: page(handle: "pre-order-policy") {
+      ...PageFields
     }
   }
 `;

@@ -845,6 +845,11 @@ export type PolicyIndexFragment = Pick<
   'id' | 'title' | 'handle'
 >;
 
+export type PageFieldsFragment = Pick<
+  StorefrontAPI.Page,
+  'id' | 'title' | 'handle'
+>;
+
 export type PoliciesIndexQueryVariables = StorefrontAPI.Exact<{
   [key: string]: never;
 }>;
@@ -867,6 +872,12 @@ export type PoliciesIndexQuery = {
       Pick<StorefrontAPI.ShopPolicyWithDefault, 'id' | 'title' | 'handle'>
     >;
   };
+  cookiesPolicy?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Page, 'id' | 'title' | 'handle'>
+  >;
+  preOrderPolicy?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Page, 'id' | 'title' | 'handle'>
+  >;
 };
 
 export type ProductVariantFragmentFragment = Pick<
@@ -1279,7 +1290,7 @@ interface GeneratedQueryTypes {
     return: PoliciesHandleQuery;
     variables: PoliciesHandleQueryVariables;
   };
-  '#graphql\n  fragment PolicyIndex on ShopPolicy {\n    id\n    title\n    handle\n  }\n\n  query PoliciesIndex {\n    shop {\n      privacyPolicy {\n        ...PolicyIndex\n      }\n      shippingPolicy {\n        ...PolicyIndex\n      }\n      termsOfService {\n        ...PolicyIndex\n      }\n      refundPolicy {\n        ...PolicyIndex\n      }\n      subscriptionPolicy {\n        id\n        title\n        handle\n      }\n    }\n  }\n': {
+  '#graphql\n  fragment PolicyIndex on ShopPolicy {\n    id\n    title\n    handle\n  }\n\n  fragment PageFields on Page {\n    id\n    title\n    handle\n  }\n\n  query PoliciesIndex {\n    shop {\n      privacyPolicy {\n        ...PolicyIndex\n      }\n      shippingPolicy {\n        ...PolicyIndex\n      }\n      termsOfService {\n        ...PolicyIndex\n      }\n      refundPolicy {\n        ...PolicyIndex\n      }\n      subscriptionPolicy {\n        id\n        title\n        handle\n      }\n    }\n    cookiesPolicy: page(handle: "cookies-policy") {\n      ...PageFields\n    }\n    preOrderPolicy: page(handle: "pre-order-policy") {\n      ...PageFields\n    }\n  }\n': {
     return: PoliciesIndexQuery;
     variables: PoliciesIndexQueryVariables;
   };
