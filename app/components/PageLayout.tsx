@@ -551,6 +551,10 @@ function ContactSection() {
     phone: '0409 975 906',
     email: 'info@barklyandco.com',
   };
+  const socialLinks = {
+    facebook: 'https://www.facebook.com/OfficialBarklyAndCo',
+    instagram: 'https://www.instagram.com/barkly_co',
+  };
 
   return (
     <>
@@ -559,9 +563,7 @@ function ContactSection() {
           {/* {item.title} */}
           Contact Us
         </Heading>
-        <div
-          className={`max-h-48 h-fit overflow-hidden transition-all duration-300`}
-        >
+        <div className={`h-fit overflow-hidden transition-all duration-300`}>
           <ul className="grid gap-2 pb-6">
             {Object.entries(contactDetails).map(([key, value]) => {
               return (
@@ -569,7 +571,20 @@ function ContactSection() {
                   <span className="font-semibold">
                     {pascalToSentenceCase(key)}:
                   </span>{' '}
-                  {value}
+                  {key === 'phone' ? (
+                    <a href={`tel:${value.replaceAll(' ', '')}`}>{value}</a>
+                  ) : key === 'email' ? (
+                    <a href={`mailto:${value}`}>{value}</a>
+                  ) : (
+                    <>{value}</>
+                  )}
+                </li>
+              );
+            })}
+            {Object.entries(socialLinks).map(([key, value]) => {
+              return (
+                <li key={key}>
+                  <a href={value}>{pascalToSentenceCase(key)}</a>
                 </li>
               );
             })}
