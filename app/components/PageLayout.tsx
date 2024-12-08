@@ -516,7 +516,7 @@ function FooterMenu({menu}: {menu?: EnhancedMenu}) {
                 {item?.items?.length > 0 ? (
                   <div
                     className={`${
-                      open ? `max-h-48 h-fit` : `max-h-0 md:max-h-fit`
+                      open ? `h-fit` : `max-h-0 md:max-h-fit`
                     } overflow-hidden transition-all duration-300`}
                   >
                     <Suspense data-comment="This suspense fixes a hydration bug in Disclosure.Panel with static prop">
@@ -557,40 +557,59 @@ function ContactSection() {
   };
 
   return (
-    <>
-      <section key={1} className={styles.section}>
-        <Heading className="flex justify-between" size="lead" as="h3">
-          {/* {item.title} */}
-          Contact Us
-        </Heading>
-        <div className={`h-fit overflow-hidden transition-all duration-300`}>
-          <ul className="grid gap-2 pb-6">
-            {Object.entries(contactDetails).map(([key, value]) => {
-              return (
-                <li key={key}>
-                  <span className="font-semibold">
-                    {pascalToSentenceCase(key)}:
-                  </span>{' '}
-                  {key === 'phone' ? (
-                    <a href={`tel:${value.replaceAll(' ', '')}`}>{value}</a>
-                  ) : key === 'email' ? (
-                    <a href={`mailto:${value}`}>{value}</a>
-                  ) : (
-                    <>{value}</>
-                  )}
-                </li>
-              );
-            })}
-            {Object.entries(socialLinks).map(([key, value]) => {
-              return (
-                <li key={key}>
-                  <a href={value}>{pascalToSentenceCase(key)}</a>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </section>
-    </>
+    <section className={styles.section}>
+      <Disclosure>
+        {({open}) => (
+          <>
+            <Disclosure.Button className="text-left md:cursor-default">
+              <Heading className="flex justify-between" size="lead" as="h3">
+                Contact Us
+                <span className="md:hidden">
+                  <IconCaret direction={open ? 'up' : 'down'} />
+                </span>
+              </Heading>
+            </Disclosure.Button>
+
+            <div
+              className={`${
+                open ? `h-fit` : `max-h-0 md:max-h-fit`
+              } overflow-hidden transition-all duration-300`}
+            >
+              <Suspense data-comment="This suspense fixes a hydration bug in Disclosure.Panel with static prop">
+                <Disclosure.Panel static>
+                  <ul className={styles.nav}>
+                    {Object.entries(contactDetails).map(([key, value]) => {
+                      return (
+                        <li key={key}>
+                          <span className="font-semibold">
+                            {pascalToSentenceCase(key)}:
+                          </span>{' '}
+                          {key === 'phone' ? (
+                            <a href={`tel:${value.replaceAll(' ', '')}`}>
+                              {value}
+                            </a>
+                          ) : key === 'email' ? (
+                            <a href={`mailto:${value}`}>{value}</a>
+                          ) : (
+                            value
+                          )}
+                        </li>
+                      );
+                    })}
+                    {Object.entries(socialLinks).map(([key, value]) => {
+                      return (
+                        <li key={key}>
+                          <a href={value}>{pascalToSentenceCase(key)}</a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </Disclosure.Panel>
+              </Suspense>
+            </div>
+          </>
+        )}
+      </Disclosure>
+    </section>
   );
 }
