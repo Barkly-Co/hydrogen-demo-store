@@ -542,7 +542,7 @@ const PRODUCT_QUERY = `#graphql
       selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {
         ...ProductVariantFragment
       }
-      media(first: 7) {
+      media(first: 50) {
         nodes {
           ...Media
         }
