@@ -118,6 +118,18 @@ shop-pay-button {
     li {
       @apply mb-4 text-lg;
     }
+
+    strong {
+      color: rgb(var(--color-primary));
+    }
+
+    a {
+      color: rgb(var(--color-primary));
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
     img {
       @apply md:-mx-8 lg:-mx-16;
 
