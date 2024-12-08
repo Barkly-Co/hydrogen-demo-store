@@ -58,6 +58,34 @@ export default {
         darkHeader: 'inset 0px -1px 0px 0px rgba(21, 21, 21, 0.4)',
         lightHeader: 'inset 0px -1px 0px 0px rgba(21, 21, 21, 0.05)',
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            strong: {
+              color: 'rgb(var(--color-primary))',
+            },
+            a: {
+              color: 'rgb(var(--color-primary))',
+              '&:hover': {
+                color: 'rgb(var(--color-primary) / 0.8)',
+              },
+            },
+          },
+        },
+        invert: {
+          css: {
+            strong: {
+              color: 'rgb(var(--color-contrast))',
+            },
+            a: {
+              color: 'rgb(var(--color-contrast))',
+              '&:hover': {
+                color: 'rgb(var(--color-contrast) / 0.8)',
+              },
+            },
+          },
+        },
+      },
     },
   },
   plugins: [formsPlugin, typographyPlugin],
