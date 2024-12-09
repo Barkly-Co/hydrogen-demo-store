@@ -45,14 +45,16 @@ export default function Page() {
   }
 
   return (
-    <>
-      <PageHeader heading={page.title}>
-        <div
-          dangerouslySetInnerHTML={{__html: page.body}}
-          className="prose dark:prose-invert"
-        />
-      </PageHeader>
-    </>
+    <div className="flex justify-center">
+      <div className="inline-block px-4">
+        <PageHeader heading={page.title}>
+          <div
+            dangerouslySetInnerHTML={{__html: page.body}}
+            className="prose dark:prose-invert"
+          />
+        </PageHeader>
+      </div>
+    </div>
   );
 }
 
