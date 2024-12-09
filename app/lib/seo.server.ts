@@ -31,7 +31,7 @@ function root({
 }): SeoConfig {
   return {
     title: shop?.name,
-    titleTemplate: '%s | Hydrogen Demo Store',
+    titleTemplate: '%s | Barkly & Co',
     description: truncate(shop?.description ?? ''),
     handle: '@shopify',
     url,
@@ -64,8 +64,9 @@ function root({
 function home({url}: {url: Request['url']}): SeoConfig {
   return {
     title: 'Home',
-    titleTemplate: '%s | Hydrogen Demo Store',
-    description: 'The best place to buy snowboarding products',
+    titleTemplate: '%s | Barkly & Co',
+    description:
+      "Discover premium western wear crafted for Australia's rodeo athletes, pastoral professionals & lifestyle enthusiasts. From competition gear to refined accessories.",
     url,
     robots: {
       noIndex: false,
