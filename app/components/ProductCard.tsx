@@ -35,7 +35,8 @@ export function ProductCard({
   const firstVariant = flattenConnection(cardProduct.variants)[0];
 
   if (!firstVariant) return null;
-  const {image, price, compareAtPrice} = firstVariant;
+  const {price, compareAtPrice} = firstVariant;
+  const image = cardProduct.featuredImage || firstVariant.image;
 
   if (label) {
     cardLabel = label;
