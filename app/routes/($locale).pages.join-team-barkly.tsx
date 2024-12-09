@@ -1,6 +1,6 @@
 import {json, type ActionFunction} from '@shopify/remix-oxygen';
 import {Form, useActionData} from '@remix-run/react';
-import {useState} from 'react';
+import {useState, useEffect, useRef} from 'react';
 
 interface State {
   value: string;
@@ -217,6 +217,13 @@ const FloatingLabelTextarea = ({
 
 export default function JoinTeam() {
   const actionData = useActionData<typeof action>() as ActionData;
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (actionData?.success) {
+      formRef.current?.reset();
+    }
+  }, [actionData?.success]);
 
   return (
     <div className="w-full px-6 md:px-8 lg:px-12">
@@ -294,7 +301,7 @@ export default function JoinTeam() {
                 </p>
               </div>
 
-              <Form method="post" className="grid gap-4">
+              <Form ref={formRef} method="post" className="grid gap-4">
                 {/* Basic Information */}
                 <div className="grid gap-3">
                   <h2 className="font-sans text-sm font-medium uppercase tracking-wide text-primary/60">
