@@ -546,7 +546,7 @@ function ContactSection() {
   };
 
   const contactDetails = {
-    address: 'Unit 6 & 14 Brockman St, Gingin WA',
+    warehouse: 'Unit 6 & 14 Brockman St, Gingin WA',
     openingHours: 'by appointment only',
     phone: '0409 975 906',
     email: 'info@barklyandco.com',
@@ -585,9 +585,12 @@ function ContactSection() {
                             {pascalToSentenceCase(key)}:
                           </span>{' '}
                           {key === 'phone' ? (
-                            <a href={`tel:${value.replaceAll(' ', '')}`}>
-                              {value}
-                            </a>
+                            <span>
+                              <a href={`tel:${value.replaceAll(' ', '')}`}>
+                                {value}
+                              </a>{' '}
+                              (sms only)
+                            </span>
                           ) : key === 'email' ? (
                             <a href={`mailto:${value}`}>{value}</a>
                           ) : (
