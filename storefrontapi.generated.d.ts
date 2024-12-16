@@ -93,6 +93,34 @@ export type FeaturedCollectionDetailsFragment = Pick<
   >;
 };
 
+export type ProductReviewsQueryVariables = StorefrontAPI.Exact<{
+  first: StorefrontAPI.Scalars['Int']['input'];
+}>;
+
+export type ProductReviewsQuery = {
+  metaobjects: {
+    nodes: Array<
+      Pick<StorefrontAPI.Metaobject, 'id'> & {
+        fields: Array<
+          Pick<StorefrontAPI.MetaobjectField, 'key' | 'value'> & {
+            reference?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Product, 'id'>>;
+            references?: StorefrontAPI.Maybe<{
+              nodes: Array<{
+                image?: StorefrontAPI.Maybe<
+                  Pick<
+                    StorefrontAPI.Image,
+                    'url' | 'altText' | 'width' | 'height'
+                  >
+                >;
+              }>;
+            }>;
+          }
+        >;
+      }
+    >;
+  };
+};
+
 export type LayoutQueryVariables = StorefrontAPI.Exact<{
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
   headerMenuHandle: StorefrontAPI.Scalars['String']['input'];
@@ -1261,6 +1289,10 @@ export type PaginatedProductsSearchQuery = {
 };
 
 interface GeneratedQueryTypes {
+  '#graphql\n  query ProductReviews($first: Int!) {\n    metaobjects(type: "product_reviews", first: $first) {\n      nodes {\n        id\n        fields {\n          key\n          value\n          reference {\n            ... on Product {\n              id\n            }\n          }\n          references(first: 5) {\n            nodes {\n              ... on MediaImage {\n                image {\n                  url\n                  altText\n                  width\n                  height\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+    return: ProductReviewsQuery;
+    variables: ProductReviewsQueryVariables;
+  };
   '#graphql\n  query layout(\n    $language: LanguageCode\n    $headerMenuHandle: String!\n    $footerMenuHandle: String!\n  ) @inContext(language: $language) {\n    shop {\n      ...Shop\n    }\n    headerMenu: menu(handle: $headerMenuHandle) {\n      ...Menu\n    }\n    footerMenu: menu(handle: $footerMenuHandle) {\n      ...Menu\n    }\n  }\n  fragment Shop on Shop {\n    id\n    name\n    description\n    primaryDomain {\n      url\n    }\n    brand {\n      logo {\n        image {\n          url\n        }\n      }\n    }\n  }\n  fragment MenuItem on MenuItem {\n    id\n    resourceId\n    tags\n    title\n    type\n    url\n  }\n  fragment ChildMenuItem on MenuItem {\n    ...MenuItem\n  }\n  fragment ParentMenuItem on MenuItem {\n    ...MenuItem\n    items {\n      ...ChildMenuItem\n    }\n  }\n  fragment Menu on Menu {\n    id\n    items {\n      ...ParentMenuItem\n    }\n  }\n': {
     return: LayoutQuery;
     variables: LayoutQueryVariables;

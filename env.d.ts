@@ -14,7 +14,11 @@ declare global {
   /**
    * A global `process` object is only available during build to access NODE_ENV.
    */
-  const process: {env: {NODE_ENV: 'production' | 'development'}};
+  const process: {
+    env: {
+      NODE_ENV: 'production' | 'development';
+    };
+  };
 
   /**
    * Declare expected Env parameter in fetch handler.
@@ -30,6 +34,8 @@ declare global {
     PUBLIC_CUSTOMER_ACCOUNT_API_URL: string;
     PUBLIC_CHECKOUT_DOMAIN: string;
     SHOP_ID: string;
+    SUPABASE_URL: string;
+    SUPABASE_ANON_KEY: string;
   }
 }
 
