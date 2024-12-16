@@ -34,5 +34,16 @@ export async function fetchReviews(
     return [];
   }
 
-  return data as Review[];
+  const reviews = data as Review[];
+
+  // Sort reviews with media to the top
+  return reviews.sort((a, b) => {
+    const aHasMedia = a.media?.length > 0;
+    const bHasMedia = b.media?.length > 0;
+    if (aHasMedia !== bHasMedia) {
+      return aHasMedia ? -1 : 1;
+    }
+    // If both have or don't have media, sort by date
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
 }

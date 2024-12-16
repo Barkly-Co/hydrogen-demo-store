@@ -1,5 +1,7 @@
+import {CheckCircle2, Play, Star} from 'lucide-react';
 import React from 'react';
-import {Star, CheckCircle2, Play} from 'lucide-react';
+
+import {toCapitalCase} from '~/lib/utils';
 
 interface ReviewMedia {
   id: string;
@@ -42,7 +44,7 @@ const MediaPreview: React.FC<{media: ReviewMedia[]}> = ({media}) => {
       {media.map((item, index) => (
         <div
           key={item.id}
-          className="relative rounded-md overflow-hidden w-16 h-16 bg-gray-100"
+          className="relative rounded-md overflow-hidden w-40 h-40 bg-gray-100"
         >
           <img
             src={item.url}
@@ -144,7 +146,7 @@ const SidebarReviews: React.FC<SidebarReviewsProps> = ({reviews}) => {
                 <p className="mt-1">{review.body}</p>
                 {review.media && <MediaPreview media={review.media} />}
                 <div className="mt-2 text-xs text-gray-500">
-                  {review.author}
+                  {toCapitalCase(review.author.split(' ')[0])}
                 </div>
               </div>
             ))}

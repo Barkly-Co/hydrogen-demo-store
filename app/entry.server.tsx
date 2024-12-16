@@ -24,6 +24,12 @@ export default async function handleRequest(
       'https://www.googletagmanager.com',
       ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:*'] : []),
     ],
+    imgSrc: [
+      'self',
+      'https://cdn.shopify.com',
+      'https://shopify.com',
+      context.env.SUPABASE_URL,
+    ],
   });
 
   const body = await renderToReadableStream(
