@@ -16,6 +16,7 @@ declare global {
    */
   const process: {
     env: {
+      SUPABASE_URL: string;
       NODE_ENV: 'production' | 'development';
     };
   };

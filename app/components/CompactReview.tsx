@@ -44,7 +44,7 @@ const MediaPreview: React.FC<{media: ReviewMedia[]}> = ({media}) => {
       {media.map((item, index) => (
         <div
           key={item.id}
-          className="relative rounded-md overflow-hidden w-16 h-16 bg-gray-100"
+          className="relative rounded-md overflow-hidden w-40 h-40 bg-gray-100"
         >
           <img
             src={item.url}
