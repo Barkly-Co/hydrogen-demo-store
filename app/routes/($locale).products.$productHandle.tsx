@@ -35,6 +35,9 @@ import {seoPayload} from '~/lib/seo.server';
 import type {Storefront} from '~/lib/type';
 import {routeHeaders} from '~/data/cache';
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
+import type {Review} from '~/components/CompactReview';
+import SidebarReviews from '~/components/CompactReview';
+import {fetchReviews} from '~/lib/supabase.server';
 
 export const headers = routeHeaders;
 
@@ -42,11 +45,15 @@ export async function loader(args: LoaderFunctionArgs) {
   const {productHandle} = args.params;
   invariant(productHandle, 'Missing productHandle param, check route filename');
 
-  // Start fetching non-critical data without blocking time to first byte
-  const deferredData = loadDeferredData(args);
-
   // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
+  invariant(criticalData.product?.id, 'No product ID found');
+
+  // Start fetching non-critical data without blocking time to first byte
+  const deferredData = loadDeferredData({
+    ...args,
+    productId: criticalData.product.id,
+  });
 
   return defer({...deferredData, ...criticalData});
 }
@@ -112,10 +119,14 @@ async function loadCriticalData({
  * fetched after the initial page load. If it's unavailable, the page should still 200.
  * Make sure to not throw any errors here, as it will cause the page to 500.
  */
-function loadDeferredData({params, context}: LoaderFunctionArgs) {
+function loadDeferredData({
+  params,
+  context,
+  productId,
+}: LoaderFunctionArgs & {productId: string}) {
   const {productHandle} = params;
   invariant(productHandle, 'Missing productHandle param, check route filename');
-
+  const {env} = context;
   // In order to show which variants are available in the UI, we need to query
   // all of them. But there might be a *lot*, so instead separate the variants
   // into it's own separate query that is deferred. So there's a brief moment
@@ -129,7 +140,13 @@ function loadDeferredData({params, context}: LoaderFunctionArgs) {
     },
   });
 
-  return {variants};
+  const reviews: Promise<Review[]> = fetchReviews(
+    productId,
+    env.SUPABASE_URL,
+    env.SUPABASE_ANON_KEY,
+  );
+
+  return {variants, reviews};
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {
@@ -157,7 +174,8 @@ function redirectToFirstVariant({
 }
 
 export default function Product() {
-  const {product, shop, recommended, variants} = useLoaderData<typeof loader>();
+  const {product, shop, recommended, variants, reviews} =
+    useLoaderData<typeof loader>();
   const {media, title, vendor, descriptionHtml} = product;
   const {shippingPolicy, refundPolicy} = shop;
 
@@ -170,7 +188,7 @@ export default function Product() {
             className="w-full lg:col-span-2"
           />
           <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:h-screen md:pt-nav hiddenScroll md:overflow-y-scroll">
-            <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0">
+            <section className="flex flex-col w-full max-w-xl gap-8 px-6 md:mx-auto md:max-w-sm md:px-0">
               <div className="grid gap-2">
                 <Heading as="h1" className="whitespace-normal">
                   {title}
@@ -191,27 +209,43 @@ export default function Product() {
                   )}
                 </Await>
               </Suspense>
-              <div className="grid gap-4 py-4">
-                {descriptionHtml && (
-                  <ProductDetail
-                    title="Product Details"
-                    content={descriptionHtml}
-                  />
-                )}
-                {shippingPolicy?.body && (
-                  <ProductDetail
-                    title="Shipping"
-                    content={getExcerpt(shippingPolicy.body)}
-                    learnMore={`/policies/${shippingPolicy.handle}`}
-                  />
-                )}
-                {refundPolicy?.body && (
-                  <ProductDetail
-                    title="Returns"
-                    content={getExcerpt(refundPolicy.body)}
-                    learnMore={`/policies/${refundPolicy.handle}`}
-                  />
-                )}
+              <div>
+                <div className="grid gap-4 py-4">
+                  {descriptionHtml && (
+                    <ProductDetail
+                      title="Product Details"
+                      content={descriptionHtml}
+                    />
+                  )}
+                  {shippingPolicy?.body && (
+                    <ProductDetail
+                      title="Shipping"
+                      content={getExcerpt(shippingPolicy.body)}
+                      learnMore={`/policies/${shippingPolicy.handle}`}
+                    />
+                  )}
+                  {refundPolicy?.body && (
+                    <ProductDetail
+                      title="Returns"
+                      content={getExcerpt(refundPolicy.body)}
+                      learnMore={`/policies/${refundPolicy.handle}`}
+                    />
+                  )}
+                </div>
+                <Suspense
+                  fallback={
+                    <div className="w-full h-48 bg-gray-100 animate-pulse rounded-lg" />
+                  }
+                >
+                  <Await
+                    errorElement="There was a problem loading the reviews"
+                    resolve={reviews}
+                  >
+                    {(reviewsData: Review[]) => (
+                      <SidebarReviews reviews={reviewsData} />
+                    )}
+                  </Await>
+                </Suspense>
               </div>
             </section>
           </div>

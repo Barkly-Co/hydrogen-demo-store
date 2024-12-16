@@ -320,3 +320,10 @@ export function pascalToSentenceCase(str: string): string {
   // Lowercase the entire string and capitalize only the first letter
   return spacedStr.charAt(0).toUpperCase() + spacedStr.slice(1).toLowerCase();
 }
+
+export function toCapitalCase(str: string) {
+  return str
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
