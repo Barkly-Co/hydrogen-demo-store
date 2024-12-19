@@ -1,26 +1,62 @@
 import {Image} from '@shopify/hydrogen';
+import {useEffect, useRef} from 'react';
 
-import type {MediaFragment} from 'storefrontapi.generated';
+import type {
+  MediaFragment,
+  ProductVariantFragmentFragment,
+} from 'storefrontapi.generated';
 
 /**
  * A client component that defines a media gallery for hosting images, 3D models, and videos of products
  */
 export function ProductGallery({
   media,
+  selectedVariant,
   className,
 }: {
   media: MediaFragment[];
+  selectedVariant?: ProductVariantFragmentFragment;
   className?: string;
 }) {
-  if (!media.length) {
+  const galleryRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to start when variant changes
+  useEffect(() => {
+    if (galleryRef.current) {
+      galleryRef.current.scrollLeft = 0;
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
+  }, [selectedVariant?.id]);
+
+  if (!media.length && !selectedVariant?.image) {
     return null;
   }
 
+  const allMedia = selectedVariant?.image
+    ? [
+        {
+          __typename: 'MediaImage',
+          mediaContentType: 'IMAGE',
+          id: `variant-${selectedVariant.id}`,
+          image: {
+            ...selectedVariant.image,
+            altText: selectedVariant.image.altText || 'Product variant image',
+          },
+          alt: selectedVariant.image.altText,
+        } as MediaFragment,
+        ...media,
+      ]
+    : media;
+
   return (
     <div
+      ref={galleryRef}
       className={`swimlane md:grid-flow-row hiddenScroll md:p-0 md:overflow-x-auto md:grid-cols-2 ${className}`}
     >
-      {media.map((med, i) => {
+      {allMedia.map((med, i) => {
         const isFirst = i === 0;
         const isFourth = i === 3;
         const isFullWidth = i % 3 === 0;
