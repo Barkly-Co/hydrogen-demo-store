@@ -1079,6 +1079,8 @@ export type VariantsQuery = {
   }>;
 };
 
+export type Variant = ProductQuery['product'];
+
 export type ProductRecommendationsQueryVariables = StorefrontAPI.Exact<{
   productId: StorefrontAPI.Scalars['ID']['input'];
   count?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
