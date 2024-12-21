@@ -34,6 +34,7 @@
     "graphql-tag": "^2.12.6",
     "isbot": "^3.8.0",
     "lucide-react": "^0.468.0",
+    "posthog-js": "^1.202.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intersection-observer": "^9.4.1",
