@@ -76,6 +76,13 @@ const API_ALL_PRODUCTS_QUERY = `#graphql
     products(first: $count, sortKey: $sortKey, reverse: $reverse, query: $query) {
       nodes {
         ...ProductCard
+        collections(first: 10) {
+          nodes {
+            id
+            title
+            handle
+          }
+        }
       }
     }
   }

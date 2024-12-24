@@ -10,6 +10,7 @@ import {
   OptimisticInput,
   type CartReturn,
 } from '@shopify/hydrogen';
+import type {MoneyV2} from '@shopify/hydrogen/customer-account-api-types';
 import type {
   Cart as CartType,
   CartCost,
@@ -283,11 +284,14 @@ function CartLineItem({line}: {line: CartLine}) {
           </Heading>
 
           <div className="grid pb-2">
-            {(merchandise?.selectedOptions || []).map((option) => (
-              <Text color="subtle" key={option.name}>
-                {option.name}: {option.value}
-              </Text>
-            ))}
+            {(merchandise?.selectedOptions || []).map(
+              (option) =>
+                option.value !== 'Default Title' && (
+                  <Text color="subtle" key={option.name}>
+                    {option.name}: {option.value}
+                  </Text>
+                ),
+            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -423,7 +427,13 @@ function CartLinePrice({
     return null;
   }
 
-  return <Money withoutTrailingZeros {...passthroughProps} data={moneyV2} />;
+  return (
+    <Money
+      withoutTrailingZeros
+      {...passthroughProps}
+      data={moneyV2 as MoneyV2}
+    />
+  );
 }
 
 export function CartEmpty({

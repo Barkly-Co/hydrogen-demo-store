@@ -118,6 +118,13 @@ const ALL_PRODUCTS_QUERY = `#graphql
     products(first: $first, last: $last, before: $startCursor, after: $endCursor) {
       nodes {
         ...ProductCard
+        collections(first: 10) {
+          nodes {
+            id
+            title
+            handle
+          }
+        }
       }
       pageInfo {
         hasPreviousPage

@@ -20,7 +20,9 @@ import {
 import {Input} from '~/components/Input';
 import {Link} from '~/components/Link';
 import {Heading, Section, Text} from '~/components/Text';
+import {TokenBadge} from '~/components/TokenBadge';
 import {useCartFetchers} from '~/hooks/useCartFetchers';
+import {useDiscountStatus} from '~/hooks/useDiscountStatus';
 import {useIsHydrated} from '~/hooks/useIsHydrated';
 import {
   type ChildEnhancedMenuItem,
@@ -202,6 +204,7 @@ function MobileHeader({
   // useHeaderStyleFix(containerStyle, setContainerStyle, isHome);
 
   const params = useParams();
+  const {isValid: hasDiscounts} = useDiscountStatus();
 
   return (
     <header
@@ -265,6 +268,18 @@ function MobileHeader({
       </Link>
 
       <div className="flex items-center justify-end w-full gap-4">
+        <div
+          className={`
+          transition-all duration-500 transform
+          ${
+            hasDiscounts
+              ? 'translate-y-0 opacity-100'
+              : '-translate-y-full opacity-0'
+          }
+        `}
+        >
+          {hasDiscounts && <TokenBadge />}
+        </div>
         <AccountLink className="relative flex items-center justify-center w-8 h-8" />
         <CartCount isHome={isHome} openCart={openCart} />
       </div>
@@ -287,6 +302,9 @@ function DesktopHeader({
 }) {
   const params = useParams();
   const {y} = useWindowScroll();
+
+  const hasDiscounts = useDiscountStatus().isValid;
+
   return (
     <header
       role="banner"
@@ -296,7 +314,7 @@ function DesktopHeader({
           : 'bg-contrast/80 text-primary'
       } ${
         !isHome && y > 50 && ' shadow-lightHeader'
-      } hidden h-nav lg:flex items-center sticky transition duration-300 backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-8 px-12 py-8`}
+      } hidden h-nav lg:flex items-center sticky transition duration-300 backdrop-blur-lg z-50 top-0 justify-between w-full leading-none gap-8 px-12 py-8`}
     >
       <div className="flex gap-12">
         <Link className="font-bold" to="/" prefetch="intent">
@@ -353,6 +371,18 @@ function DesktopHeader({
             <IconSearch />
           </button>
         </Form>
+        <div
+          className={`
+          transition-all duration-500 transform
+          ${
+            hasDiscounts
+              ? 'translate-y-0 opacity-100'
+              : '-translate-y-full opacity-0'
+          }
+        `}
+        >
+          {hasDiscounts && <TokenBadge />}
+        </div>
         <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" />
         <CartCount isHome={isHome} openCart={openCart} />
       </div>
