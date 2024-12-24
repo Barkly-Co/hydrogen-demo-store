@@ -1,43 +1,46 @@
-import {useRef, Suspense} from 'react';
 import {Disclosure, Listbox} from '@headlessui/react';
+import {Await, useLoaderData, useNavigate} from '@remix-run/react';
 import {
-  defer,
-  type MetaArgs,
-  redirect,
-  type LoaderFunctionArgs,
-} from '@shopify/remix-oxygen';
-import {useLoaderData, Await, useNavigate} from '@remix-run/react';
-import {
+  Analytics,
+  getSelectedProductOptions,
   getSeoMeta,
   Money,
   ShopPayButton,
   VariantSelector,
-  getSelectedProductOptions,
-  Analytics,
 } from '@shopify/hydrogen';
-import invariant from 'tiny-invariant';
+import type {MoneyV2} from '@shopify/hydrogen/storefront-api-types';
+import {
+  defer,
+  redirect,
+  type LoaderFunctionArgs,
+  type MetaArgs,
+} from '@shopify/remix-oxygen';
 import clsx from 'clsx';
+import {Suspense, useRef} from 'react';
+import invariant from 'tiny-invariant';
 
 import type {
   ProductQuery,
   ProductVariantFragmentFragment,
 } from 'storefrontapi.generated';
-import {Heading, Section, Text} from '~/components/Text';
-import {Link} from '~/components/Link';
-import {Button} from '~/components/Button';
 import {AddToCartButton} from '~/components/AddToCartButton';
-import {Skeleton} from '~/components/Skeleton';
-import {ProductSwimlane} from '~/components/ProductSwimlane';
-import {ProductGallery} from '~/components/ProductGallery';
-import {IconCaret, IconCheck, IconClose} from '~/components/Icon';
-import {getExcerpt} from '~/lib/utils';
-import {seoPayload} from '~/lib/seo.server';
-import type {Storefront} from '~/lib/type';
-import {routeHeaders} from '~/data/cache';
-import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
+import {Button} from '~/components/Button';
 import type {Review} from '~/components/CompactReview';
 import SidebarReviews from '~/components/CompactReview';
+import {IconCaret, IconCheck, IconClose} from '~/components/Icon';
+import {Link} from '~/components/Link';
+import {ProductGallery} from '~/components/ProductGallery';
+import {ProductSwimlane} from '~/components/ProductSwimlane';
+import {Skeleton} from '~/components/Skeleton';
+import {Heading, Section, Text} from '~/components/Text';
+import {routeHeaders} from '~/data/cache';
+import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
+import {useDiscountStatus} from '~/hooks/useDiscountStatus';
+import {getProductDiscount} from '~/lib/discountSystem';
+import {seoPayload} from '~/lib/seo.server';
 import {fetchReviews} from '~/lib/supabase.server';
+import type {Storefront} from '~/lib/type';
+import {getExcerpt} from '~/lib/utils';
 
 export const headers = routeHeaders;
 
@@ -307,6 +310,13 @@ export function ProductForm({
 
   const navigate = useNavigate();
 
+  const {isValid: hasDiscountToken} = useDiscountStatus();
+
+  const {isDiscounted, discountedPrice} = getProductDiscount(
+    product,
+    hasDiscountToken,
+  );
+
   return (
     <div className="grid gap-10">
       <div className="grid gap-4">
@@ -442,14 +452,20 @@ export function ProductForm({
                   <span>Add to Cart</span> <span>·</span>{' '}
                   <Money
                     withoutTrailingZeros
-                    data={selectedVariant?.price!}
+                    data={
+                      (discountedPrice as MoneyV2) || selectedVariant.price!
+                    }
                     as="span"
                     data-test="price"
                   />
-                  {isOnSale && (
+                  {(isOnSale || isDiscounted) && (
                     <Money
                       withoutTrailingZeros
-                      data={selectedVariant?.compareAtPrice!}
+                      data={
+                        isDiscounted
+                          ? selectedVariant?.price
+                          : selectedVariant?.compareAtPrice!
+                      }
                       as="span"
                       className="opacity-50 strike"
                     />
@@ -570,6 +586,13 @@ const PRODUCT_QUERY = `#graphql
       handle
       descriptionHtml
       description
+      collections(first: 10) {
+        nodes {
+          id
+          title
+          handle
+        }
+      }
       options {
         name
         optionValues {

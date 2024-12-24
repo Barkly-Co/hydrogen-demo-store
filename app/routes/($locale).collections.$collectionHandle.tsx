@@ -305,6 +305,13 @@ const COLLECTION_QUERY = `#graphql
         }
         nodes {
           ...ProductCard
+          collections(first: 10) {
+          nodes {
+            id
+            title
+            handle
+          }
+        }
         }
         pageInfo {
           hasPreviousPage
