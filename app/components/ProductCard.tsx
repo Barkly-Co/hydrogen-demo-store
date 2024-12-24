@@ -1,14 +1,17 @@
-import clsx from 'clsx';
 import {flattenConnection, Image, Money, useMoney} from '@shopify/hydrogen';
 import type {MoneyV2, Product} from '@shopify/hydrogen/storefront-api-types';
+import clsx from 'clsx';
+import {Crown} from 'lucide-react';
 
 import type {ProductCardFragment} from 'storefrontapi.generated';
-import {Text} from '~/components/Text';
-import {Link} from '~/components/Link';
-import {Button} from '~/components/Button';
 import {AddToCartButton} from '~/components/AddToCartButton';
-import {isDiscounted, isNewArrival} from '~/lib/utils';
+import {Button} from '~/components/Button';
+import {Link} from '~/components/Link';
+import {Text} from '~/components/Text';
+import {useDiscountStatus} from '~/hooks/useDiscountStatus';
+import {getProductDiscount} from '~/lib/discountSystem';
 import {getProductPlaceholder} from '~/lib/placeholders';
+import {isDiscounted, isNewArrival} from '~/lib/utils';
 
 export function ProductCard({
   product,
@@ -26,6 +29,7 @@ export function ProductCard({
   quickAdd?: boolean;
 }) {
   let cardLabel;
+  const {isValid: hasDiscountToken} = useDiscountStatus();
 
   const cardProduct: Product = product?.variants
     ? (product as Product)
@@ -38,12 +42,17 @@ export function ProductCard({
   const {price, compareAtPrice} = firstVariant;
   const image = cardProduct.featuredImage || firstVariant.image;
 
+  const {isDiscounted: productIsDiscounted, discountedPrice} =
+    getProductDiscount(product, hasDiscountToken);
+
   if (label) {
     cardLabel = label;
   } else if (isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2)) {
     cardLabel = 'Sale';
   } else if (isNewArrival(product.publishedAt)) {
     cardLabel = 'New';
+  } else if (productIsDiscounted) {
+    cardLabel = <Crown width={20} />;
   }
 
   return (
@@ -65,13 +74,15 @@ export function ProductCard({
                 loading={loading}
               />
             )}
-            <Text
-              as="label"
-              size="fine"
-              className="absolute top-0 right-0 m-4 text-right text-notice"
-            >
-              {cardLabel}
-            </Text>
+            {cardLabel && (
+              <Text
+                as="label"
+                size="fine"
+                className="absolute top-0 right-0 m-4 text-right bg-slate-950 text-white px-2 py-1 rounded"
+              >
+                {cardLabel}
+              </Text>
+            )}
           </div>
           <div className="grid gap-1">
             <Text
@@ -82,12 +93,25 @@ export function ProductCard({
             </Text>
             <div className="flex gap-4">
               <Text className="flex gap-4">
-                <Money withoutTrailingZeros data={price!} />
+                <Money
+                  withoutTrailingZeros
+                  data={
+                    productIsDiscounted ? (discountedPrice as MoneyV2) : price!
+                  }
+                />
                 {isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2) && (
                   <CompareAtPrice
                     className={'opacity-50'}
                     data={compareAtPrice as MoneyV2}
                   />
+                )}
+                {productIsDiscounted && (
+                  <>
+                    <CompareAtPrice
+                      className={'opacity-50'}
+                      data={price as MoneyV2}
+                    />
+                  </>
                 )}
               </Text>
             </div>

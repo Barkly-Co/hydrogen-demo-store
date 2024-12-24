@@ -88,8 +88,11 @@ export async function loader(args: LoaderFunctionArgs) {
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  */
 async function loadCriticalData({request, context}: LoaderFunctionArgs) {
-  const [layout] = await Promise.all([
+  const {session} = context;
+
+  const [layout, token] = await Promise.all([
     getLayoutData(context),
+    session.get('discount_token'),
     // Add other queries here, so that they are loaded in parallel
   ]);
 
@@ -110,6 +113,12 @@ async function loadCriticalData({request, context}: LoaderFunctionArgs) {
       withPrivacyBanner: true,
     },
     selectedLocale: storefront.i18n,
+    discountToken: token
+      ? {
+          active: true,
+          created: token.created,
+        }
+      : null,
   };
 }
 
