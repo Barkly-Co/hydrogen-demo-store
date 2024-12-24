@@ -102,7 +102,7 @@ const SidebarReviews: React.FC<SidebarReviewsProps> = ({reviews}) => {
   const reviewsWithMedia = reviews.filter((r) => r.media?.length).length;
 
   return (
-    <div className="w-full py-4 rounded-lg shadow-sm">
+    <div className=" max-w-[calc(100vw-50px)] w-full py-4 rounded-lg shadow-sm overflow-hi">
       <div className="border-b pb-3">
         <div className="flex items-baseline gap-2">
           <span className="text-2xl font-bold">{avgRating.toFixed(1)}</span>
