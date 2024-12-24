@@ -44,6 +44,13 @@ export const FEATURED_ITEMS_QUERY = `#graphql
     featuredProducts: products(first: $pageBy) {
       nodes {
         ...ProductCard
+        collections(first: 10) {
+          nodes {
+            id
+            title
+            handle
+          }
+        }
       }
     }
   }

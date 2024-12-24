@@ -662,10 +662,24 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   ) @inContext(country: $country, language: $language) {
     recommended: productRecommendations(productId: $productId) {
       ...ProductCard
+      collections(first: 10) {
+        nodes {
+          id
+          title
+          handle
+        }
+      }
     }
     additional: products(first: $count, sortKey: BEST_SELLING) {
       nodes {
         ...ProductCard
+        collections(first: 10) {
+          nodes {
+            id
+            title
+            handle
+          }
+        }
       }
     }
   }

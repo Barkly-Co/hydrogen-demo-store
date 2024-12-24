@@ -293,6 +293,13 @@ export const HOMEPAGE_FEATURED_PRODUCTS_QUERY = `#graphql
     products(first: 8) {
       nodes {
         ...ProductCard
+        collections(first: 10) {
+          nodes {
+            id
+            title
+            handle
+          }
+        }
       }
     }
   }
