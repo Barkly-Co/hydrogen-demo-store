@@ -1,4 +1,5 @@
 import {useMatches} from '@remix-run/react';
+import {Button} from '~/components/Button';
 
 import {UnlockDiscounts} from '~/components/UnlockDiscounts';
 
@@ -28,6 +29,14 @@ export default function Discounts() {
             <p className="text-green-600 text-lg mb-8">
               You now have access to exclusive discounts on selected items
             </p>
+            <div className="gap-4 flex mx-auto w-fit">
+              <Button variant="secondary" to={'/collections'}>
+                Shop Collections
+              </Button>
+              <Button variant="secondary" to={'/products'}>
+                Shop Products
+              </Button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

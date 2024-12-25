@@ -1,5 +1,10 @@
 {
-  "include": ["./**/*.d.ts", "./**/*.ts", "./**/*.tsx"],
+  "include": [
+    "./**/*.d.ts",
+    "./**/*.ts",
+    "./**/*.tsx",
+    "app/components/FacebookPixel.client.jsx"
+  ],
   "exclude": ["node_modules", "dist", "playwright.config.ts"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
