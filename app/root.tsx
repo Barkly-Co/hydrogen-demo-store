@@ -28,7 +28,8 @@ import invariant from 'tiny-invariant';
 import {PageLayout} from '~/components/PageLayout';
 import {GenericError} from '~/components/GenericError';
 import {NotFound} from '~/components/NotFound';
-import favicon from '~/assets/favicon.svg';
+import {ThirdPartyAnalyticsIntegration} from '~/components/ThirdPartyAnalyticsIntegration.jsx';
+import favicon from '~/assets/favicon.ico';
 import {seoPayload} from '~/lib/seo.server';
 import styles from '~/styles/app.css?url';
 
@@ -165,6 +166,7 @@ function Layout({children}: {children?: React.ReactNode}) {
               key={`${locale.language}-${locale.country}`}
               layout={data.layout}
             >
+              <ThirdPartyAnalyticsIntegration />
               {children}
             </PageLayout>
           </Analytics.Provider>

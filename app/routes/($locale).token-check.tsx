@@ -6,6 +6,7 @@ export const loader = async ({
   context: {session},
 }: LoaderFunctionArgs) => {
   const token = await session.get('discount_token');
+  const EXPIRY_DATE = new Date('2025-01-01T00:30:00+08:00').getTime(); // Jan 1st 12:30am AWST
 
   return json({
     hasToken: !!token,
@@ -17,7 +18,7 @@ export const loader = async ({
         }
       : null,
     // If you want to check expiry
-    isExpired: token ? Date.now() - token.created > 24 * 60 * 60 * 1000 : null,
+    isExpired: token ? Date.now() > EXPIRY_DATE : null,
   });
 };
 
