@@ -24,22 +24,17 @@ export default async function handleRequest(
       'https://www.googletagmanager.com',
       ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:*'] : []),
       'https://us-assets.i.posthog.com',
-      'connect.facebook.net',
-      'https://connect.facebook.net',
     ],
     imgSrc: [
       'self',
       'https://cdn.shopify.com',
       'https://shopify.com',
       context.env.SUPABASE_URL,
-      'www.facebook.com',
-      'https://www.facebook.com',
     ],
     connectSrc: [
       'self',
       'https://us.i.posthog.com',
       'https://us-assets.i.posthog.com',
-      'https://www.facebook.com',
     ],
   });
 
