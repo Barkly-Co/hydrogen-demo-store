@@ -23,8 +23,8 @@ export type Product = {
   collections?: {
     nodes?: ShopifyCollection[];
   };
-  variant: {
-    price: Price;
+  variants: {
+    nodes: Array<{price: Price}>;
   };
 };
 

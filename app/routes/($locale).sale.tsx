@@ -1,13 +1,20 @@
 import {useMatches} from '@remix-run/react';
 import {Button} from '~/components/Button';
+import type {SerializeFrom} from '@shopify/remix-oxygen';
 
+import type {RootLoader} from '~/root';
 import {UnlockDiscounts} from '~/components/UnlockDiscounts';
+
+type RootData = SerializeFrom<RootLoader>;
 
 export default function Discounts() {
   const matches = useMatches();
   const data = matches.find(
-    (match) => match.data && 'discountToken' in match.data,
-  )?.data;
+    (match) =>
+      match.data &&
+      typeof match.data === 'object' &&
+      'discountToken' in match.data,
+  )?.data as RootData | undefined;
 
   const hasDiscounts = !!data?.discountToken;
 
