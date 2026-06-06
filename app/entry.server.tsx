@@ -24,6 +24,8 @@ export default async function handleRequest(
       'https://www.googletagmanager.com',
       ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:*'] : []),
       'https://us-assets.i.posthog.com',
+      'https://static.klaviyo.com',
+      'https://static-tracking.klaviyo.com',
     ],
     imgSrc: [
       'self',
@@ -35,6 +37,7 @@ export default async function handleRequest(
       'self',
       'https://us.i.posthog.com',
       'https://us-assets.i.posthog.com',
+      'https://a.klaviyo.com',
     ],
   });
 

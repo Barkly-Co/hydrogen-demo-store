@@ -37,6 +37,7 @@ declare global {
     SHOP_ID: string;
     SUPABASE_URL: string;
     SUPABASE_ANON_KEY: string;
+    PUBLIC_KLAVIYO_API_KEY: string;
   }
 }
 

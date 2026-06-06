@@ -21,6 +21,7 @@ import {
   Analytics,
   getShopAnalytics,
   getSeoMeta,
+  Script,
   type SeoConfig,
 } from '@shopify/hydrogen';
 import invariant from 'tiny-invariant';
@@ -119,6 +120,7 @@ async function loadCriticalData({request, context}: LoaderFunctionArgs) {
           created: token.created,
         }
       : null,
+    klaviyoApiKey: env.PUBLIC_KLAVIYO_API_KEY,
   };
 }
 
@@ -170,6 +172,13 @@ function Layout({children}: {children?: React.ReactNode}) {
           </Analytics.Provider>
         ) : (
           children
+        )}
+        {data?.klaviyoApiKey && (
+          <Script
+            async
+            type="text/javascript"
+            src={`//static.klaviyo.com/onsite/js/${data.klaviyoApiKey}/klaviyo.js`}
+          />
         )}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
