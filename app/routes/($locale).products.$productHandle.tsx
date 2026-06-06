@@ -185,7 +185,7 @@ export default function Product() {
 
   useEffect(() => {
     trackViewedProduct(product);
-  }, [product.id]);
+  }, [product.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
