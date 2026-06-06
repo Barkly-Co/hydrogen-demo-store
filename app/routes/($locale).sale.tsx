@@ -1,7 +1,7 @@
 import {useMatches} from '@remix-run/react';
-import {Button} from '~/components/Button';
 import type {SerializeFrom} from '@shopify/remix-oxygen';
 
+import {Button} from '~/components/Button';
 import type {RootLoader} from '~/root';
 import {UnlockDiscounts} from '~/components/UnlockDiscounts';
 
