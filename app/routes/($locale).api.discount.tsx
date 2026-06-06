@@ -7,7 +7,7 @@ export async function action({request, context}: ActionFunctionArgs) {
     return json({error: 'Method not allowed'}, {status: 405});
   }
 
-  const data = await request.json();
+  const data = (await request.json()) as {discountCodes: string | string[]};
   const {discountCodes} = data;
 
   // Accept either a single code or an array of codes

@@ -21,6 +21,7 @@ import {
   Analytics,
   getShopAnalytics,
   getSeoMeta,
+  Script,
   type SeoConfig,
 } from '@shopify/hydrogen';
 import invariant from 'tiny-invariant';
@@ -28,7 +29,7 @@ import invariant from 'tiny-invariant';
 import {PageLayout} from '~/components/PageLayout';
 import {GenericError} from '~/components/GenericError';
 import {NotFound} from '~/components/NotFound';
-import favicon from '~/assets/favicon.svg';
+import favicon from '~/assets/favicon.ico';
 import {seoPayload} from '~/lib/seo.server';
 import styles from '~/styles/app.css?url';
 
@@ -119,6 +120,7 @@ async function loadCriticalData({request, context}: LoaderFunctionArgs) {
           created: token.created,
         }
       : null,
+    klaviyoApiKey: env.PUBLIC_KLAVIYO_API_KEY,
   };
 }
 
@@ -170,6 +172,13 @@ function Layout({children}: {children?: React.ReactNode}) {
           </Analytics.Provider>
         ) : (
           children
+        )}
+        {data?.klaviyoApiKey && (
+          <Script
+            async
+            type="text/javascript"
+            src={`//static.klaviyo.com/onsite/js/${data.klaviyoApiKey}/klaviyo.js`}
+          />
         )}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />

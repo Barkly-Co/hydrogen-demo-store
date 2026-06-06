@@ -16,7 +16,7 @@ import {
   type MetaArgs,
 } from '@shopify/remix-oxygen';
 import clsx from 'clsx';
-import {Suspense, useRef} from 'react';
+import {Suspense, useEffect, useRef} from 'react';
 import invariant from 'tiny-invariant';
 
 import type {
@@ -24,6 +24,7 @@ import type {
   ProductVariantFragmentFragment,
 } from 'storefrontapi.generated';
 import {AddToCartButton} from '~/components/AddToCartButton';
+import {trackAddedToCart, trackViewedProduct} from '~/components/Onsite';
 import {Button} from '~/components/Button';
 import type {Review} from '~/components/CompactReview';
 import SidebarReviews from '~/components/CompactReview';
@@ -181,6 +182,10 @@ export default function Product() {
     useLoaderData<typeof loader>();
   const {media, title, vendor, descriptionHtml} = product;
   const {shippingPolicy, refundPolicy} = shop;
+
+  useEffect(() => {
+    trackViewedProduct(product);
+  }, [product.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -444,6 +449,7 @@ export function ProductForm({
                 ]}
                 variant="primary"
                 data-test="add-to-cart"
+                onClick={() => trackAddedToCart(product)}
               >
                 <Text
                   as="span"

@@ -6,6 +6,7 @@ import {Crown} from 'lucide-react';
 import type {ProductCardFragment} from 'storefrontapi.generated';
 import {AddToCartButton} from '~/components/AddToCartButton';
 import {Button} from '~/components/Button';
+import {trackAddedToCart} from '~/components/Onsite';
 import {Link} from '~/components/Link';
 import {Text} from '~/components/Text';
 import {useDiscountStatus} from '~/hooks/useDiscountStatus';
@@ -128,6 +129,20 @@ export function ProductCard({
           ]}
           variant="secondary"
           className="mt-2"
+          onClick={() =>
+            trackAddedToCart({
+              id: product.id,
+              title: product.title,
+              handle: product.handle,
+              vendor: product.vendor,
+              selectedVariant: {
+                image: firstVariant.image,
+                price: firstVariant.price,
+                compareAtPrice: firstVariant.compareAtPrice ?? null,
+                unitPrice: null,
+              },
+            })
+          }
         >
           <Text as="span" className="flex items-center justify-center gap-2">
             Add to Cart

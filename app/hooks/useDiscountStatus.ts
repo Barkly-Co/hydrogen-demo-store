@@ -1,12 +1,20 @@
 import {useMatches} from '@remix-run/react';
+import type {SerializeFrom} from '@shopify/remix-oxygen';
+
+import type {RootLoader} from '~/root';
+
+type RootData = SerializeFrom<RootLoader>;
 
 const TOKEN_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 export function useDiscountStatus() {
   const matches = useMatches();
   const data = matches.find(
-    (match) => match.data && 'discountToken' in match.data,
-  )?.data;
+    (match) =>
+      match.data &&
+      typeof match.data === 'object' &&
+      'discountToken' in match.data,
+  )?.data as RootData | undefined;
 
   const token = data?.discountToken;
 
